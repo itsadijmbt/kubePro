@@ -10,7 +10,7 @@ spec:
   ingressClassName: nginx
   rules:
   # -host: name.ourdomain
-  - host: vprofile.ilovemywife.co.in
+  - host: vprofile.<urdomain>
     http:
       paths:
       - pathType: Prefix
