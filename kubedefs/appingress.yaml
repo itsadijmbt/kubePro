@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vpro-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: true
+  labels:
+    app.kubernetes.io/name: vpro-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  # -host: name.ourdomain
+  - host: vprofile.ilovemywife.co.in
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+          # name of the frontend serivice
+            name: vproapp-service
+            port: 
+              number: 8080

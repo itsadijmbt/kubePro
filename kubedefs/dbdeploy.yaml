@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vprodb
+  template:
+    metadata:
+      labels:
+        app: vprodb
+    spec:
+      containers:
+       - name: vprodb
+         image: vprocontainers/vprofiledb
+         volumeMounts:
+          - name: vpro-db-data
+            mountPath: /var/lib/mysql
+         ports:
+          - containerPort: 3306
+            name: vprodb-port
+         env:
+         - name: MYSQL_ROOT_PASSWORD
+           valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: db-pass
+      volumes:
+        - name: vpro-db-data
+          persistentVolumeClaim:
+            claimName: db-pv-claim
+      # why we need this init container
+      # EBS vol has a lost+found so it is not empty
+      # so SQL denies serivce startup 
+      # so we create a init Container that runs once and does the cleanup
+      initContainer:
+      - name: init-myservice
+        image: busybox
+        args: ["rm","-rf","/var/lib/mysql/lost+found"]
+        volumeMounts:
+          - name: vpro-db-data
+            mountPath: /var/lib/mysql
+
+
+# we have to map/mount the pvc to a volume
+ 

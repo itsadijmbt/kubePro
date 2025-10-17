@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+# same name as mq service in app.properties file
+
+  name: vpromq01
+spec:
+  selector:
+  # backend info should match with pod info
+    app: vprormq
+  ports:
+  - port: 5672
+    targetPort: vprormq-port
+    protocol: TCP
+  type: ClusterIP

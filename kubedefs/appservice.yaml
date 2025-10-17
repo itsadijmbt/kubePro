@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+# same name as mq service in app.properties file
+# backend info should match with pod info
+  name: vproapp-service
+spec:
+  selector:
+    app: vproapp
+  ports:
+  - port: 8080
+    targetPort: vproapp-port
+    protocol: TCP
+  type: ClusterIP
